@@ -3,9 +3,11 @@ package ra.jv240502_nguyenhuuchung.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
 import ra.jv240502_nguyenhuuchung.model.entity.Employee;
 import ra.jv240502_nguyenhuuchung.service.employee.EmployeeService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,26 +22,30 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        List<Employee> employees = employeeService.getAllEmployees();
-        return ResponseEntity.ok(employees);
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-        Employee savedEmployee = employeeService.createEmployee(employee);
-        return ResponseEntity.ok(savedEmployee);
+    public ResponseEntity<Employee> addEmployee(@RequestParam("name") String name,
+                                                @RequestParam("email") String email,
+                                                @RequestParam("phone") String phone,
+                                                @RequestParam("avatar") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(employeeService.addEmployee(name, email, phone, file));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable String id, @RequestBody Employee employee) {
-        Employee updatedEmployee = employeeService.updateEmployee(id, employee);
-        return ResponseEntity.ok(updatedEmployee);
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id,
+                                                   @RequestParam("name") String name,
+                                                   @RequestParam("email") String email,
+                                                   @RequestParam("phone") String phone,
+                                                   @RequestParam(value = "avatar", required = false) MultipartFile file) throws IOException {
+        return ResponseEntity.ok(employeeService.updateEmployee(id, name, email, phone, file));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable String id) {
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Xóa nhân viên thành công");
     }
 }

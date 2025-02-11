@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Getter
 @Setter
@@ -15,34 +16,25 @@ import java.util.Date;
 @Entity
 public class Employee {
     @Id
-    @Column(length = 5)
-    private Long empId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
+
+    @Column(name = "email", unique = true, nullable = false, length = 100)
+    private String email;
+
+    @Column(name = "phone", nullable = false, length = 15)
+    private String phone;
+
+    @Column(name = "status", columnDefinition = "BIT DEFAULT 1")
+    private boolean status = true; // 1: Đang làm, 0: Nghỉ việc
+
+    @Column(name = "avatar_url")
+    private String avatarUrl; // Link ảnh từ Cloudinary
 
     @ManyToOne
-    @JoinColumn(name = "Dept_id", nullable = false)
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
-
-    @Column(name = "Emp_name", nullable = false, length = 100)
-    private String empName;
-
-    @Column(name = "Emp_BirthOfDate", nullable = false)
-    private Date empBirthOfDate;
-
-    @Column(name = "Emp_Sex", nullable = false)
-    private Boolean empSex;
-
-    @Column(name = "Emp_address", nullable = false)
-    private String empAddress;
-
-    @Column(name = "Emp_email", nullable = false, unique = true, length = 199)
-    private String empEmail;
-
-    @Column(name = "Emp_phone", nullable = false, unique = true, length = 11)
-    private String empPhone;
-
-    @Column(name = "Emp_avatar")
-    private String empAvatar;
-
-    @Column(name = "Emp_status", columnDefinition = "BIT DEFAULT 1")
-    private Boolean empStatus = true;
 }

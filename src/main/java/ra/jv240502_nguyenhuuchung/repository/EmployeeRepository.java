@@ -7,7 +7,5 @@ import ra.jv240502_nguyenhuuchung.model.entity.Employee;
 import java.util.List;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, String> {
-    List<Employee> findByEmpNameContainingOrEmpAddressContainingOrEmpEmailContainingOrEmpPhoneContaining(
-            String name, String address, String email, String phone);
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 }

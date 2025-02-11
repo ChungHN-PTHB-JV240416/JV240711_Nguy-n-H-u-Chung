@@ -16,19 +16,16 @@ import java.util.List;
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long deptId;
+    private Long id;
 
-    @Column(name = "Dept_Name", unique = true, nullable = false, length = 99)
-    private String deptName;
+    @Column(name = "name", unique = true, nullable = false, length = 100)
+    private String name;
 
-    @Column(name = "Dept_description")
-    private String deptDescription;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "Dept_status", columnDefinition = "BIT DEFAULT 1")
-    private boolean deptStatus = true;
-
-    @Column(name = "image")
-    private String profileImage;
+    @Column(name = "status", columnDefinition = "BIT DEFAULT 1")
+    private boolean status = true;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Employee> employees;

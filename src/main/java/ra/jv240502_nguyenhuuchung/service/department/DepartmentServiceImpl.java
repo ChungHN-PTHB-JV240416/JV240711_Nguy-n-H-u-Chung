@@ -15,11 +15,9 @@ import java.util.UUID;
 @Service
 public class DepartmentServiceImpl implements DepartmentService{
     private final DepartmentRepository departmentRepository;
-    private final CloudinaryService cloudinaryService;
 
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository, CloudinaryService cloudinaryService) {
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
-        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -28,22 +26,28 @@ public class DepartmentServiceImpl implements DepartmentService{
     }
 
     @Override
-    public Department createDepartment(Department department) {
+    public Department addDepartment(Department department) {
+        if (departmentRepository.existsByName(department.getName())) {
+            throw new RuntimeException("Tên phòng ban đã tồn tại");
+        }
         return departmentRepository.save(department);
     }
 
     @Override
     public Department updateDepartment(Long id, Department department) {
-        if (departmentRepository.existsById(id)) {
-            department.setDeptId(id);
-            return departmentRepository.save(department);
-        }
-        throw new RuntimeException("Department not found");
+        return departmentRepository.findById(id).map(existing -> {
+            existing.setName(department.getName());
+            existing.setDescription(department.getDescription());
+            existing.setStatus(department.isStatus());
+            return departmentRepository.save(existing);
+        }).orElseThrow(() -> new RuntimeException("Phòng ban không tồn tại"));
     }
 
     @Override
     public void deleteDepartment(Long id) {
+        if (!departmentRepository.existsById(id)) {
+            throw new RuntimeException("Phòng ban không tồn tại");
+        }
         departmentRepository.deleteById(id);
     }
-
 }

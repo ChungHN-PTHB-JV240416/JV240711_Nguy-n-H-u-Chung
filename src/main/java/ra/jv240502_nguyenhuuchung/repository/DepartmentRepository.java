@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ra.jv240502_nguyenhuuchung.model.entity.Department;
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
-    boolean existsByDeptName(String deptName);
+    boolean existsByName(String name);
 }
